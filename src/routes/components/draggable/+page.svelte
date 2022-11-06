@@ -22,6 +22,14 @@
 // 	$: console.log(moving);
 </script>
 
+<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+
+
+<section on:mousedown={onMouseDown} style="left: {left}px; top: {top}px;" class="draggable">
+	<slot></slot>
+</section>
+
+
 <style>
 	.draggable {
 		user-select: none;
@@ -30,9 +38,3 @@
 		position: absolute;
 	}
 </style>
-
-<section on:mousedown={onMouseDown} style="left: {left}px; top: {top}px;" class="draggable">
-	<slot></slot>
-</section>
-
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
