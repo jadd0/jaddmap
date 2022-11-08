@@ -5,6 +5,22 @@
 	let currentNum: any = 0;
 	let number: number = 0;
 
+	function rightClick(e: any) {
+		e.preventDefault();
+		const idNum = getNode(e)
+		console.log(idNum)
+
+		// TODO display menu to customise the node
+		/* DISPLAY MENU
+				- change text
+				- change colour
+
+			 DOUBLE CLICK
+				- add node to clicked node
+				- need to change line to base off which is parent node
+		*/
+	}
+
 	function createNode() {
 		console.log('first', nodes);
 		// let last: number = 0;
@@ -31,6 +47,9 @@
 
 	function deleteNode(e: any) {
 		const idNum: number = getNode(e);
+		if (idNum == 1) {
+			return
+		}
 		console.log(idNum);
 		console.log('first', nodes);
 
@@ -61,6 +80,7 @@
 		stroke = 'black',
 		width = 1
 	) {
+		// TODO make a point outside of node to connect to (like minemeister)
 		ctx.beginPath();
 		ctx.moveTo(begin[0], begin[1]);
 
@@ -151,7 +171,7 @@
 	}
 </script>
 
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+<svelte:window on:contextmenu={rightClick} on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
 <body>
 	<div id="controls">
