@@ -61,24 +61,10 @@
 		stroke = 'black',
 		width = 1
 	) {
-		// if (stroke) {
-		// 	ctx.strokeStyle = stroke;
-		// }
-
-		// if (width) {
-		// 	ctx.lineWidth = width;
-		// }
-
-		// ctx.beginPath();
-		// ctx.moveTo(...begin);
-		// ctx.lineTo(...end);
-		// ctx.stroke();
-		// var ctx = demo.getContext('2d'),
-		// var c = document.getElementById('myCanvas');
-		// ctx = c.getContext('2d');
 		ctx.beginPath();
 		ctx.moveTo(begin[0], begin[1]);
-		ctx.quadraticCurveTo(200, 200, 100, 200);
+		// ctx.lineTo(nodes[0].left, nodes[0].top); 
+		ctx.quadraticCurveTo(300, 100, nodes[0].left, nodes[0].top);
 		ctx.lineWidth = '5';
 		ctx.stroke();
 	}
@@ -87,11 +73,15 @@
 		const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		const ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		for (let node of nodes) {
-			if (node == undefined) continue;
+		let node: number = 0
+		for (let node = 0; node < nodes.length; node++) {
+
+			if (node == 0) continue;
+
+
 			drawLine(
 				ctx,
-				[node.left, node.top],
+				[nodes[node].left, nodes[node].top],
 				[nodes[0].left, nodes[0].top],
 				'green',
 				5
@@ -125,17 +115,18 @@
 		if (canvas.getContext) {
 			let ctx = canvas.getContext('2d');
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			for (let node of nodes) {
-				if (node == undefined || node.num == obj.num) continue;
+			for (let node = 0; node < nodes.length; node++) {
+				if (nodes[node].num == obj.num || node == 0) continue;
 				ctx = canvas.getContext('2d');
 				drawLine(
 					ctx,
-					[node.left, node.top],
+					[nodes[node].left, nodes[node].top],
 					[nodes[0].left, nodes[0].top],
 					'green',
 					5
 				);
 			}
+			if(obj == nodes[0]) return
 			drawLine(
 				ctx,
 				[obj.left, obj.top],
