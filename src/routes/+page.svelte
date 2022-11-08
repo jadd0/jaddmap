@@ -23,8 +23,8 @@
 			left: 100,
 		};
 		// console.log(nodes.push(node))
-		nodes.push(node)
-		nodes = nodes
+		nodes.push(node);
+		nodes = nodes;
 		drawLines();
 		console.log('last', nodes);
 	}
@@ -36,7 +36,7 @@
 
 		nodes = [...nodes.filter((value) => value != undefined)];
 		nodes = [...nodes.filter((value) => value.num != idNum)];
-		
+
 		drawLines();
 		console.log('last', nodes);
 	}
@@ -61,17 +61,25 @@
 		stroke = 'black',
 		width = 1
 	) {
-		if (stroke) {
-			ctx.strokeStyle = stroke;
-		}
+		// if (stroke) {
+		// 	ctx.strokeStyle = stroke;
+		// }
 
-		if (width) {
-			ctx.lineWidth = width;
-		}
+		// if (width) {
+		// 	ctx.lineWidth = width;
+		// }
 
+		// ctx.beginPath();
+		// ctx.moveTo(...begin);
+		// ctx.lineTo(...end);
+		// ctx.stroke();
+		// var ctx = demo.getContext('2d'),
+		// var c = document.getElementById('myCanvas');
+		// ctx = c.getContext('2d');
 		ctx.beginPath();
-		ctx.moveTo(...begin);
-		ctx.lineTo(...end);
+		ctx.moveTo(begin[0], begin[1]);
+		ctx.quadraticCurveTo(200, 200, 100, 200);
+		ctx.lineWidth = '5';
 		ctx.stroke();
 	}
 
@@ -108,9 +116,9 @@
 			obj.left += e.movementX;
 			obj.top += e.movementY;
 		}
-		console.log(nodes)
+		// console.log(nodes)
 		// nodes[currentNum] = obj;
-		nodes = [...nodes]
+		nodes = [...nodes];
 		const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		if (canvas == undefined) return;
 
@@ -184,8 +192,8 @@
 		position: absolute;
 		transition: transform 0.2s;
 		background: red;
-		width: 100px;
-		height: 100px;
+		width: 50px;
+		height: 50px;
 		z-index: 1;
 		/* background: black */
 	}
