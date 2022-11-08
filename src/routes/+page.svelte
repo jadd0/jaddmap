@@ -1,32 +1,44 @@
 <script lang="ts">
-	import Draggable from './components/draggable/+page.svelte';
-
+	// TODO work out why not removed from array NEED TO UPDATE NODES
 	let nodes: { type: string; num: number; top: number; left: number }[] = [];
 	let moving: boolean = false;
 	let currentNum: any = 0;
+	let number: number = 0;
 
 	function createNode() {
-		let last: number = 0;
-		if (nodes.length != 0) {
-			last = nodes[nodes.length - 1].num + 1;
-		}
+		console.log('first', nodes);
+		// let last: number = 0;
+
+		// if (nodes.length != 0) {
+		// 	last = nodes[nodes.length - 1].num + 1;
+		// }
+
+		// console.log(last)
+		number += 1;
 
 		const node = {
 			type: 'node',
-			num: last,
+			num: number,
 			top: 100,
 			left: 100,
 		};
-		nodes = [...nodes, node];
-		console.log(nodes);
+		// console.log(nodes.push(node))
+		nodes.push(node)
+		nodes = nodes
+		drawLines();
+		console.log('last', nodes);
 	}
 
 	function deleteNode(e: any) {
 		const idNum: number = getNode(e);
 		console.log(idNum);
+		console.log('first', nodes);
 
+		nodes = [...nodes.filter((value) => value != undefined)];
 		nodes = [...nodes.filter((value) => value.num != idNum)];
-		console.log(nodes);
+		
+		drawLines();
+		console.log('last', nodes);
 	}
 
 	function getNode(e: any) {
@@ -63,12 +75,23 @@
 		ctx.stroke();
 	}
 
-  function drawLines() {
-    
-  }
+	function drawLines() {
+		const canvas = <HTMLCanvasElement>document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		for (let node of nodes) {
+			if (node == undefined) continue;
+			drawLine(
+				ctx,
+				[node.left, node.top],
+				[nodes[0].left, nodes[0].top],
+				'green',
+				5
+			);
+		}
+	}
 
 	function onMouseDown(e: any) {
-		console.log('hjfdkf');
 		const idNum = getNode(e);
 		currentNum = idNum;
 		moving = true;
@@ -76,27 +99,26 @@
 
 	function onMouseMove(e: any) {
 		// const idNum = getNode(e);
+
 		let obj = nodes.find((value) => value.num == currentNum);
 
 		if (obj == undefined) return;
 
 		if (moving) {
-			console.log(e.movementX, e.movementY);
 			obj.left += e.movementX;
 			obj.top += e.movementY;
 		}
-
-		nodes[currentNum] = obj;
-
+		console.log(nodes)
+		// nodes[currentNum] = obj;
+		nodes = [...nodes]
 		const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		if (canvas == undefined) return;
 
-		console.log(canvas);
 		if (canvas.getContext) {
 			let ctx = canvas.getContext('2d');
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			for (let node of nodes) {
-				if (node.num == obj.num) continue;
+				if (node == undefined || node.num == obj.num) continue;
 				ctx = canvas.getContext('2d');
 				drawLine(
 					ctx,
@@ -114,7 +136,6 @@
 				5
 			);
 		}
-		console.log('hbfdshbf');
 	}
 
 	function onMouseUp() {
