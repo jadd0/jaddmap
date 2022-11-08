@@ -63,21 +63,29 @@
 	) {
 		ctx.beginPath();
 		ctx.moveTo(begin[0], begin[1]);
-		// ctx.lineTo(nodes[0].left, nodes[0].top); 
-		ctx.quadraticCurveTo(300, 100, nodes[0].left, nodes[0].top);
-		ctx.lineWidth = '5';
-		ctx.stroke();
+
+		if (end[0] > begin[0]) {
+			ctx.quadraticCurveTo(begin[0]+200, begin[1]+10, nodes[0].left+10, nodes[0].top);
+			ctx.lineWidth = '5';
+			ctx.stroke();
+			return;
+		}
+
+		ctx.quadraticCurveTo(begin[0]-200, begin[1]-10, nodes[0].left+10, nodes[0].top);
+			ctx.lineWidth = '5';
+			ctx.stroke();
+			
+
+		// ctx.lineTo(nodes[0].left, nodes[0].top);
 	}
 
 	function drawLines() {
 		const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		const ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		let node: number = 0
+		let node: number = 0;
 		for (let node = 0; node < nodes.length; node++) {
-
 			if (node == 0) continue;
-
 
 			drawLine(
 				ctx,
@@ -126,7 +134,7 @@
 					5
 				);
 			}
-			if(obj == nodes[0]) return
+			if (obj == nodes[0]) return;
 			drawLine(
 				ctx,
 				[obj.left, obj.top],
@@ -183,8 +191,8 @@
 		position: absolute;
 		transition: transform 0.2s;
 		background: red;
-		width: 50px;
-		height: 50px;
+		width: 10px;
+		height: 10px;
 		z-index: 1;
 		/* background: black */
 	}
