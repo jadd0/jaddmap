@@ -1,35 +1,46 @@
 <script lang="ts">
-	// TODO work out why not removed from array NEED TO UPDATE NODES
-	let nodes: { type: string; num: number; top: number; left: number; parentNum: any }[] = [];
+	// TODO display menu to customise the node
+	/* DISPLAY MENU
+				- change text
+				- change colour
+
+		 DOUBLE CLICK
+				- add node to clicked node
+				- need to change line to base off which is parent node
+
+		 fix lines
+		 make zoomable
+		 make saveable
+		 make login
+		 make ability to change colours
+		*/
+
+	let nodes: {
+		type: string;
+		num: number;
+		top: number;
+		left: number;
+		parentNum: any;
+	}[] = [];
 	let moving: boolean = false;
 	let currentNum: any = 0;
 	let number: number = 0;
 
 	function rightClick(e: any) {
 		e.preventDefault();
-		const idNum = getNode(e)
-		console.log(idNum)
-
-		// TODO display menu to customise the node
-		/* DISPLAY MENU
-				- change text
-				- change colour
-
-			 DOUBLE CLICK
-				- add node to clicked node
-				- need to change line to base off which is parent node
-		*/
+		const idNum = getNode(e);
+		console.log(idNum);
 	}
 
 	function createNode(parent: number) {
 		number += 1;
-		console.log(parent)
+		console.log(parent);
 		const node = {
 			type: 'node',
 			num: number,
 			top: 100,
 			left: 100,
-			parentNum: parent
+			parentNum: parent,
 		};
 		// console.log(nodes.push(node))
 		nodes.push(node);
@@ -41,7 +52,7 @@
 	function deleteNode(e: any) {
 		const idNum: number = getNode(e);
 		if (idNum == 1) {
-			return
+			return;
 		}
 		console.log(idNum);
 		console.log('first', nodes);
@@ -73,21 +84,31 @@
 		stroke = 'black',
 		width = 1
 	) {
+		let start = { x: begin[0], y: begin[1] };
+		let cp1 = { x: start.x * 1.02, y: start.y * 1.29 };
+		let cp2 = { x: end[0] * 0.84, y: end[1] * 0.53 };
+		let end1 = { x: end[0], y: end[1] };
+
 		// TODO make a point outside of node to connect to (like minemeister)
+
+
 		ctx.beginPath();
-		ctx.moveTo(begin[0], begin[1]);
-
-		if (end[0] > begin[0]) {
-			ctx.quadraticCurveTo(begin[0]+200, begin[1]+10, end[0]+10, end[1]);
-			ctx.lineWidth = end[0] === nodes[0].left ? '5' : '3';
-			ctx.stroke();
-			return;
-		}
-
-		ctx.quadraticCurveTo(begin[0]-200, begin[1]-10, end[0]+10, end[1]);
+		ctx.moveTo(start.x, start.y);
+		ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end1.x, end1.y);
 		ctx.lineWidth = end[0] === nodes[0].left ? '5' : '3';
-			ctx.stroke();
-			
+		ctx.stroke();
+
+		// if (end[0] > begin[0]) {
+		// 	ctx.quadraticCurveTo(begin[0] + 200, begin[1] + 10, end[0] + 10, end[1]);
+		// 	ctx.lineWidth = end[0] === nodes[0].left ? '5' : '3';
+		// 	ctx.stroke();
+		// 	return;
+		// }
+
+		// ctx.quadraticCurveTo(begin[0] - 200, begin[1] - 10, end[0] + 10, end[1]);
+		// ctx.lineWidth = end[0] === nodes[0].left ? '5' : '3';
+		// ctx.stroke();
+		// ctx.bezierCurveTo(0.02, 0.29, 0.94, 0.53);
 
 		// ctx.lineTo(nodes[0].left, nodes[0].top);
 	}
@@ -99,7 +120,7 @@
 		let node: number = 0;
 		for (let node = 0; node < nodes.length; node++) {
 			if (node == 0) continue;
-			const parent = nodes.find((value) =>  value.num == nodes[node].parentNum )
+			const parent = nodes.find((value) => value.num == nodes[node].parentNum);
 			drawLine(
 				ctx,
 				[nodes[node].left, nodes[node].top],
@@ -142,10 +163,11 @@
 				// console.log(node == 0)
 				ctx = canvas.getContext('2d');
 
-				const parent = nodes.find((value) =>  value.num == nodes[node].parentNum )
+				const parent = nodes.find(
+					(value) => value.num == nodes[node].parentNum
+				);
 				if (parent == undefined) {
-					console.log("oops, no parent")
-					
+					console.log('oops, no parent');
 				}
 				drawLine(
 					ctx,
@@ -156,16 +178,9 @@
 				);
 			}
 			if (obj == nodes[0]) return;
-			const parent = nodes.find((value) =>  value.num == obj.parentNum )
-			drawLine(
-				ctx,
-				[obj.left, obj.top],
-				[parent.left, parent.top],
-				'green',
-				5
-			);
+			const parent = nodes.find((value) => value.num == obj.parentNum);
+			drawLine(ctx, [obj.left, obj.top], [parent.left, parent.top], 'green', 5);
 		}
-		
 	}
 
 	function onMouseUp() {
@@ -174,15 +189,23 @@
 	}
 
 	function rename() {
-		console.log("hel")
+		console.log('hel');
 	}
 </script>
 
-<svelte:window on:contextmenu={rightClick} on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+<svelte:window
+	on:contextmenu={rightClick}
+	on:mouseup={onMouseUp}
+	on:mousemove={onMouseMove}
+/>
 
 <body>
 	<div id="controls">
-		<button on:click={() => { createNode(1) }}>New node</button>
+		<button
+			on:click={() => {
+				createNode(1);
+			}}>New node</button
+		>
 	</div>
 
 	<!-- <div class="actionsContainer">
@@ -206,7 +229,11 @@
 	<canvas id="canvas" width="2000" height="1000" />
 	<div id="canvas1" width="2000" height="1000">
 		{#each nodes as node}
-			<div on:dblclick={() => { createNode(node.num) }}>
+			<div
+				on:dblclick={() => {
+					createNode(node.num);
+				}}
+			>
 				<section
 					on:mousedown={onMouseDown}
 					style="left: {node.left}px; top: {node.top}px;"
@@ -221,7 +248,6 @@
 </body>
 
 <style>
-
 	.actionsContainer {
 		width: 220px;
 		height: 280px;
@@ -253,8 +279,6 @@
 	h2 {
 		color: white;
 	}
-
-
 
 	#canvas1 {
 		width: 100vw;
